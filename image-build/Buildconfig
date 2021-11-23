@@ -1,13 +1,12 @@
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  annotations:
-    app.openshift.io/vcs-ref: ''
-    app.openshift.io/vcs-uri: 'https://github.com/MoOyeg/openshift-quick-networkpolicy-demo.git'
-    openshift.io/generated-by: OpenShiftWebConsole
   name: ubi8-nc
   namespace: openshift
+  labels:
+    app: ubi8-nc
 spec:
+  nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
@@ -24,6 +23,8 @@ spec:
     type: Git
     git:
       uri: 'https://github.com/MoOyeg/openshift-quick-networkpolicy-demo.git'
-    contextDir: /
+    contextDir: /image-build
+  triggers:
+    - type: ConfigChange
   runPolicy: Serial
 

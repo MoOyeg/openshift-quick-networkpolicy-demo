@@ -1,0 +1,41 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ubi8-nc-reciever
+  namespace: policy-allow-same-namespace
+  labels:
+    app: ubi8-nc-reciever
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubi8-nc-reciever
+  template:
+    metadata:
+      labels:
+        app: ubi8-nc-reciever
+        deploymentconfig: ubi8-nc-reciever
+    spec:
+      containers:
+        - name: ubi8-nc
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/ubi8-nc:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources: {}
+          command: ["/bin/bash"]
+          args: ["-c","while :; do sleep infinity; done"]
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
