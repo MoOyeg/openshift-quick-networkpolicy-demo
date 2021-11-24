@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - 100-namespace.yaml
+  - 101-namespace.yaml
+  - 200-rolebinding-image-pull.yaml
+  - 201-rolebinding-image-pull.yaml
+  - 220-rolebinding-namespace-control.yaml
+  - 400-deployment-reciever.yaml
+  - 500-deployment-sender-same-namespace.yaml
+  - 501-deployment-sender-outside-namespace.yaml
+  - 600-service-reciever.yaml

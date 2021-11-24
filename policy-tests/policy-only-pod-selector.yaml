@@ -1,0 +1,17 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: policy-only-pod-selector
+  namespace: namespace-a
+spec:
+  podSelector:
+    matchLabels:
+      app: ubi8-nc-reciever
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: ubi8-nc-sender-b
+          namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: namespace-b

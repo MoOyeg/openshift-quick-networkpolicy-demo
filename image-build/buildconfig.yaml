@@ -2,7 +2,7 @@ kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: ubi8-nc
-  namespace: openshift
+  namespace: quick-network-policy-images
   labels:
     app: ubi8-nc
 spec:
@@ -10,7 +10,7 @@ spec:
   output:
     to:
       kind: ImageStreamTag
-      name: 'ubi8-nc:latest'
+      name: "ubi8-nc:latest"
   resources: {}
   successfulBuildsHistoryLimit: 5
   failedBuildsHistoryLimit: 5
@@ -22,9 +22,8 @@ spec:
   source:
     type: Git
     git:
-      uri: 'https://github.com/MoOyeg/openshift-quick-networkpolicy-demo.git'
+      uri: "https://github.com/MoOyeg/openshift-quick-networkpolicy-demo.git"
     contextDir: /image-build
   triggers:
     - type: ConfigChange
   runPolicy: Serial
-

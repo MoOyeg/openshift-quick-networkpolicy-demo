@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ubi8-nc-reciever
+  namespace: namespace-a
+  labels:
+    app: ubi8-nc-reciever
+spec:
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: ubi8-nc-reciever
+  type: ClusterIP

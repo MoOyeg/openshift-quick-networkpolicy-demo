@@ -1,0 +1,50 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ubi8-nc-reciever
+  namespace: namespace-a
+  labels:
+    app: ubi8-nc-reciever
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubi8-nc-reciever
+  template:
+    metadata:
+      labels:
+        app: ubi8-nc-reciever
+        deploymentconfig: ubi8-nc-reciever
+    spec:
+      containers:
+        - name: ubi8-nc
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/quick-network-policy-images/ubi8-nc:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources: {}
+          command: ["/bin/bash"]
+          args: ["-c", "while :; do nc -k -l 0.0.0.0 8080; done"]
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
